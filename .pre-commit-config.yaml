@@ -1,0 +1,45 @@
+repos:
+  - repo: https://github.com/hhatto/autopep8
+    rev: v2.3.2
+    hooks:
+      - id: autopep8
+
+  - repo: https://github.com/pycqa/isort
+    rev: 6.0.0
+    hooks:
+      - id: isort
+        name: isort (python)
+        args: [--profile=black]
+
+  # Análisis estático y limpieza
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        args: ['--max-line-length=120']
+        exclude: '(^|/)migrations/'
+
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        exclude: ^migrations/
+        exclude: ^migrations/
+        types: [python]
+        require_serial: true
+        args:
+          [
+            "-rn",  # Only display messages
+            "-sn",
+            "--rcfile=.pylintrc",  # Don't display the score
+            "--ignore=migrations/",
+            "--verbose",
+          ]
+        exclude: '(^|/)migrations/'
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.3.1
+    hooks:
+      - id: autoflake
+        args: [--remove-all-unused-imports, --in-place]
