@@ -53,6 +53,7 @@ MY_APPS = [
 THIRD_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_yasg",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + MY_APPS + THIRD_APPS
@@ -73,6 +74,25 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'JWT Authorization header usando el esquema Bearer. Ejemplo: "Bearer <tu_token>"'
+        }
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
