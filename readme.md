@@ -32,9 +32,6 @@ Rocosto es un sistema que facilita el desarrollo e implementación de análisis 
 
 4. [Uso](#uso)
 
-5. [Contribuciones](#contribuciones)
-
-6. [Licencia](#licencia)
 
   
 
@@ -62,24 +59,29 @@ Rocosto es un sistema que facilita el desarrollo e implementación de análisis 
 
   
 
-## Estructura del Proyecto
-
-  
+# Estructura del Proyecto
 
 La estructura principal del proyecto (según la captura de pantalla y tu descripción) es la siguiente:
+
+    rocosto/
   
-
-rocosto/
-├── apps/
-├── backend/
-├── utils/
-├── .gitignore
-├── manage.py
-├── pre-commit-config.yaml
-├── pylintrc
-├── requirements.txt
-└── ...
-
+      ├── apps/
+      
+      ├── backend/
+      
+      ├── utils/
+      
+      ├── .gitignore
+      
+      ├── manage.py
+      
+      ├── pre-commit-config.yaml
+      
+      ├── pylintrc
+    
+      ├── requirements.txt
+      
+      └── ...
 
   
 
@@ -111,7 +113,6 @@ A continuación, se describe el proceso paso a paso para poner en marcha el proy
 
 ### 1. Clonar el Repositorio
 
-  
 
 1. Abre tu terminal o línea de comandos.
 
@@ -119,21 +120,11 @@ A continuación, se describe el proceso paso a paso para poner en marcha el proy
 
 3. Ejecuta:
 
-bash
-
-Copy
-
-`git clone https://github.com/antoniojosev/Rocosto-backend.git`
+        git clone https://github.com/antoniojosev/Rocosto-backend.git
 
 4. Entra a la carpeta del proyecto:
 
-bash
-
-Copy
-
-`cd rocosto`
-
-  
+        cd rocosto
 
 ### 2. Crear y Activar Entorno Virtual
 
@@ -147,19 +138,15 @@ Crear un entorno virtual te permite mantener las dependencias de este proyecto s
 
     bash
 
-
-        `python3 -m venv venv
-
-        source venv/bin/activate`
+        python3 -m venv venv
+        source venv/bin/activate
 
 - En Windows:
 
     batch
 
-
-        `python -m venv venv
-
-        venv\Scripts\activate`
+        python -m venv venv
+        venv\Scripts\activate
 
   
 
@@ -179,7 +166,7 @@ En el proyecto encontrarás un archivo `requirements.txt` que contiene las depen
 
 2. Ejecuta:
 
-`pip install -r requirements.txt`
+        pip install -r requirements.txt
 
   
 
@@ -208,7 +195,7 @@ Por defecto, Django usa SQLite. Si estás de acuerdo con usar SQLite en desarrol
 Django utiliza migraciones para crear y actualizar la estructura de la base de datos según los modelos definidos en las aplicaciones. Para ejecutar las migraciones:
 
 
-`python manage.py migrate`
+    python manage.py migrate
 
   
 
@@ -224,7 +211,7 @@ Para acceder al panel de administración de Django, necesitas un superusuario:
 
   
 
-`python manage.py createsuperuser`
+    python manage.py createsuperuser
 
   
 
@@ -239,7 +226,7 @@ El sistema te pedirá un nombre de usuario, correo electrónico (opcional) y con
 Finalmente, para levantar el servidor de desarrollo de Django, ejecuta:
   
 
-`python manage.py runserver`
+    python manage.py runserver
 
   
 
