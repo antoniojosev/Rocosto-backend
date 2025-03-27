@@ -8,6 +8,7 @@ from ..serializers.serializers import (
     MaterialSerializer,
     UnitSerializer,
     WorkItemSerializer,
+    WorkItemUpdateSerializer,
 )
 
 # pylint: disable=too-many-ancestors
@@ -41,3 +42,16 @@ class LaborViewSet(viewsets.ModelViewSet):
 class WorkItemViewSet(viewsets.ModelViewSet):
     queryset = WorkItem.objects.all()
     serializer_class = WorkItemSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'update':
+            return WorkItemUpdateSerializer
+        return self.serializer_class
+
+    def update(self, request, *args, **kwargs):
+        print("Entrando al método UPDATE de WorkItemViewSet")
+        return super().update(request, *args, **kwargs)
+
+    def get_object(self):
+        # Asegúrate de que obtienes la instancia de WorkItem correctamente
+        return self.queryset.get(id=self.kwargs['pk'])

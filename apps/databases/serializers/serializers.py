@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
+from apps.budgets.models import Budget
+
 from ..models import Database, Equipment, Labor, Material, Unit, WorkItem
 
 
@@ -25,49 +27,55 @@ class DatabaseSerializer(serializers.ModelSerializer):
         fields = ['id', 'code', 'name', 'description', 'user']
 
 
-class MaterialSerializer(serializers.ModelSerializer):
-    unit = UnitSerializer(read_only=True)
+class BaseResourceSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(required=False)
+    database = DatabaseSerializer(many=False, read_only=True)
+
+    class Meta:
+        abstract = True  # Indicamos que es una clase abstracta
+
+    def _get_database(self):
+        return self.context.get('database') or Database.objects.first()
+
+    def validate_code(self, value):
+        request = self.context.get('request')
+        if request and request.method == 'PUT' or self.instance:
+            print('oooooooooooooooooooooooooooooooooooooooooooooooooooo')
+            return value
+        database = self._get_database()
+        # Suponiendo que cada serializer derive de un modelo distinto
+        model_class = self.Meta.model
+        if model_class.objects.filter(code=value, database=database).exists():
+            raise serializers.ValidationError(
+                'Ya existe un recurso con este código en la base de datos.'
+            )
+        return value
+
+
+class MaterialSerializer(BaseResourceSerializer):
+    unit = UnitSerializer(many=False, read_only=True)
     unit_id = serializers.UUIDField(write_only=True)
-    database = DatabaseSerializer(read_only=True)
-    database_id = serializers.UUIDField(write_only=True)
 
     class Meta:
         model = Material
-        fields = ['id', 'code', 'description', 'unit', 'unit_id',
-                  'cost', 'database', 'database_id']
+        fields = [
+            'id',
+            'code',
+            'description',
+            'unit',
+            'unit_id',
+            'cost',
+            'database',
+        ]
 
-    def validate(self, attrs):
-        database_id = attrs.get('database_id')
-        code = attrs.get('code')
-
+    def validate_cost(self, value):
         if self.instance:
-            if database_id:
-                database = Database.objects.get(id=database_id)
-            else:
-                database = self.instance.database
-
-            exists = Material.objects.filter(
-                code=code,
-                database=database
-            ).exclude(id=self.instance.id).exists()
-        else:
-            database = Database.objects.get(id=database_id)
-            exists = Material.objects.filter(
-                code=code,
-                database=database
-            ).exists()
-
-        if exists:
-            raise serializers.ValidationError({
-                'code': 'Ya existe un material con este código en la base de datos.'
-            })
-
-        if attrs.get('cost', 0) <= 0:
-            raise serializers.ValidationError({
-                'cost': 'El costo debe ser mayor que cero.'
-            })
-
-        return attrs
+            return value
+        if value <= 0:
+            raise serializers.ValidationError(
+                'El costo debe ser mayor que cero.'
+            )
+        return value
 
     def validate_unit_id(self, value):
         try:
@@ -77,65 +85,58 @@ class MaterialSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "La unidad especificada no existe.") from exc
 
+    def create(self, validated_data):
+        unit_id = validated_data.pop('unit_id', None)
+        unit = Unit.objects.get(id=unit_id)
+        database_instance = self._get_database()
+        material = Material.objects.create(
+            database=database_instance,
+            unit=unit,
+            **validated_data
+        )
+        return material
 
-class EquipmentSerializer(serializers.ModelSerializer):
-    database = DatabaseSerializer(read_only=True)
-    database_id = serializers.UUIDField(write_only=True)
+    def update(self, instance, validated_data):
+        unit_id = validated_data.pop('unit_id', None)
+        if unit_id:
+            instance.unit = Unit.objects.get(id=unit_id)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
+
+class EquipmentSerializer(BaseResourceSerializer):
 
     class Meta:
         model = Equipment
-        fields = ['id', 'code', 'description', 'cost',
-                  'depreciation', 'database', 'database_id']
+        fields = [
+            'id',
+            'code',
+            'description',
+            'cost',
+            'depreciation',
+            'database',
+        ]
 
-    def validate_database_id(self, value):
-        try:
-            Database.objects.get(id=value)
-            return value
-        except ObjectDoesNotExist as exc:
+    def validate_cost(self, value):
+        if value <= 0:
             raise serializers.ValidationError(
-                "La base de datos especificada no existe.") from exc
+                'El costo debe ser mayor que cero.'
+            )
+        return value
 
-    def validate(self, attrs):
-        database_id = attrs.get('database_id')
-        code = attrs.get('code')
-
-        if self.instance:
-            if database_id:
-                database = Database.objects.get(id=database_id)
-            else:
-                database = self.instance.database
-
-            exists = Equipment.objects.filter(
-                code=code,
-                database=database
-            ).exclude(id=self.instance.id).exists()
-        else:
-            database = Database.objects.get(id=database_id)
-            exists = Equipment.objects.filter(
-                code=code,
-                database=database
-            ).exists()
-
-        if exists:
-            raise serializers.ValidationError({
-                'code': 'Ya existe un equipo con este código en la base de datos.'
-            })
-
-        if attrs.get('cost', 0) <= 0:
-            raise serializers.ValidationError({
-                'cost': 'El costo debe ser mayor que cero.'
-            })
-
-        if attrs.get('depreciation', 0) <= 0:
-            raise serializers.ValidationError({
-                'depreciation': 'La depreciación debe ser mayor que cero.'
-            })
-
-        return attrs
+    def validate_depreciation(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                'La depreciación debe ser mayor que cero.'
+            )
+        return value
 
     def create(self, validated_data):
-        database_id = validated_data.pop('database_id')
-        database_instance = Database.objects.get(id=database_id)
+        database_instance = self._get_database()
+        print('aaaaaaaaaaaa', database_instance)
         equipment = Equipment.objects.create(
             database=database_instance,
             **validated_data
@@ -143,185 +144,425 @@ class EquipmentSerializer(serializers.ModelSerializer):
         return equipment
 
     def update(self, instance, validated_data):
-        if 'database_id' in validated_data:
-            database_id = validated_data.pop('database_id')
-            instance.database = Database.objects.get(id=database_id)
-        return super().update(instance, validated_data)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 
-class LaborSerializer(serializers.ModelSerializer):
-    database = DatabaseSerializer(read_only=True)
-    database_id = serializers.UUIDField(write_only=True)
+class LaborSerializer(BaseResourceSerializer):
 
     class Meta:
         model = Labor
-        fields = ['id', 'code', 'description', 'hourly_cost',
-                  'database', 'database_id']
+        fields = [
+            'id',
+            'code',
+            'description',
+            'hourly_cost',
+            'database',
+        ]
+        read_only_fields = [
+            'database',
+        ]
 
-    def validate(self, attrs):
-        database_id = attrs.get('database_id')
-        code = attrs.get('code')
+    def validate_hourly_cost(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                'El costo por hora debe ser mayor que cero.'
+            )
+        return value
 
-        if self.instance:
-            if database_id:
-                database = Database.objects.get(id=database_id)
-            else:
-                database = self.instance.database
+    def create(self, validated_data):
+        database_instance = self._get_database()
+        labor = Labor.objects.create(
+            database=database_instance,
+            **validated_data
+        )
+        return labor
 
-            exists = Labor.objects.filter(
-                code=code,
-                database=database
-            ).exclude(id=self.instance.id).exists()
-        else:
-            database = Database.objects.get(id=database_id)
-            exists = Labor.objects.filter(
-                code=code,
-                database=database
-            ).exists()
-
-        if exists:
-            raise serializers.ValidationError({
-                'code': 'Ya existe un recurso de mano de obra con este código.'
-            })
-
-        if attrs.get('hourly_cost', 0) <= 0:
-            raise serializers.ValidationError({
-                'hourly_cost': 'El costo por hora debe ser mayor que cero.'
-            })
-
-        return attrs
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 
-class WorkItemSerializer(serializers.ModelSerializer):
-    materials = MaterialSerializer(many=True, read_only=True)
-    equipment = EquipmentSerializer(many=True, read_only=True)
-    labor = LaborSerializer(many=True, read_only=True)
-    database = DatabaseSerializer(read_only=True)
-    database_id = serializers.UUIDField(write_only=True)
-    material_ids = serializers.ListField(
-        child=serializers.UUIDField(),
-        write_only=True,
-        required=False
-    )
-    equipment_ids = serializers.ListField(
-        child=serializers.UUIDField(),
-        write_only=True,
-        required=False
-    )
-    labor_ids = serializers.ListField(
-        child=serializers.UUIDField(),
-        write_only=True,
-        required=False
-    )
+class WorkItemSerializer(BaseResourceSerializer):
+
+    material = MaterialSerializer(many=True, required=False)
+    equipment = EquipmentSerializer(many=True, required=False)
+    labor = LaborSerializer(many=True, required=False)
+    budget_id = serializers.UUIDField(
+        format='hex_verbose', write_only=True, required=True)
+    total_labor_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_labor_cost')
+    total_equipment_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_equipment_cost')
+    total_material_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_material_cost')
+    total_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_cost')
 
     class Meta:
         model = WorkItem
         fields = [
-            'id', 'code', 'description', 'unit',
-            'materials', 'equipment', 'labor',
-            'yield_rate', 'database', 'database_id',
-            'material_ids', 'equipment_ids', 'labor_ids'
+            'id',
+            'code',
+            'description',
+            'unit',
+            'material',
+            'equipment',
+            'labor',
+            'yield_rate',
+            'database',
+            'total_labor_cost',
+            'total_equipment_cost',
+            'total_material_cost',
+            'total_cost',
+            'covening_code',
+            'material_unit_usage',
+            'budget_id'
+
         ]
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'database']
+
+    def validate_budget_id(self, value):
+        if self.instance:
+            return value
+        if not Budget.objects.filter(id=value).exists():
+            raise serializers.ValidationError(
+                'El presupuesto no existe.'
+            )
+        return value
+
+    def validate_yield_rate(self, value):
+        if self.instance:
+            return value
+        if value <= 0:
+            raise serializers.ValidationError(
+                'El rendimiento debe ser mayor que cero.'
+            )
+        return value
+
+    def _validate_resource_exists(self, resource_id, model_class, resource_name):
+        if self.instance:
+            return
+        try:
+            return model_class.objects.get(id=resource_id)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError({
+                resource_name: f'El {resource_name} con id {resource_id} no existe.'
+            })
+
+    def _save_resources(self, serializer_class, data, model_class, existing_ids):
+        resources = []
+
+        if data:
+            serializer = serializer_class(many=True, data=data)
+            if serializer.is_valid(raise_exception=True):
+                resources.extend(serializer.save())
+
+        if existing_ids:
+            resources.extend(model_class.objects.filter(id__in=existing_ids))
+
+        return resources
 
     def validate(self, attrs):
-        database_id = attrs.get('database_id')
-        code = attrs.get('code')
-
-        # Validar existencia y unicidad del código
+        # Si estamos actualizando (instance existe), verificar que los recursos pertenezcan al workitem
         if self.instance:
-            if database_id:
-                database = Database.objects.get(id=database_id)
-            else:
-                database = self.instance.database
+            resource_validations = [
+                (attrs.get('material', []), self.instance.material, 'material'),
+                (attrs.get('equipment', []), self.instance.equipment, 'equipo'),
+                (attrs.get('labor', []), self.instance.labor, 'mano de obra')
+            ]
 
-            exists = WorkItem.objects.filter(
-                code=code,
-                database=database
-            ).exclude(id=self.instance.id).exists()
-        else:
-            database = Database.objects.get(id=database_id)
-            exists = WorkItem.objects.filter(
-                code=code,
-                database=database
-            ).exists()
+            for resource_data, resource_queryset, resource_name in resource_validations:
+                existing_ids = [item['id']
+                                for item in resource_data if 'id' in item]
+                if existing_ids:
+                    valid_ids = set(
+                        resource_queryset.values_list('id', flat=True))
+                    invalid_ids = set(existing_ids) - valid_ids
+                    if invalid_ids:
+                        raise serializers.ValidationError({
+                            resource_name: (
+                                f'Los siguientes IDs de {resource_name} no están relacionados con este item: {invalid_ids}')
+                        })
 
-        if exists:
-            raise serializers.ValidationError({
-                'code': 'Ya existe un ítem de trabajo con este código.'
-            })
+            return super().validate(attrs)
 
-        if attrs.get('yield_rate', 0) <= 0:
-            raise serializers.ValidationError({
-                'yield_rate': 'El rendimiento debe ser mayor que cero.'
-            })
+        resource_validations = [
+            (attrs.get('material', []), Material, 'material'),
+            (attrs.get('equipment', []), Equipment, 'equipo'),
+            (attrs.get('labor', []), Labor, 'mano de obra')
+        ]
 
-        if 'material_ids' in attrs:
-            material_ids = attrs['material_ids']
-            materials = Material.objects.filter(
-                id__in=material_ids,
-                database=database
-            )
-            if len(materials) != len(material_ids):
-                raise serializers.ValidationError({
-                    'material_ids': 'Uno o más materiales no existen o no pertenecen a la base de datos.'
-                })
-
-        if 'equipment_ids' in attrs:
-            equipment_ids = attrs['equipment_ids']
-            equipment = Equipment.objects.filter(
-                id__in=equipment_ids,
-                database=database
-            )
-            if len(equipment) != len(equipment_ids):
-                raise serializers.ValidationError({
-                    'equipment_ids': 'Uno o más equipos no existen o no pertenecen a la base de datos.'
-                })
-
-        if 'labor_ids' in attrs:
-            labor_ids = attrs['labor_ids']
-            labor = Labor.objects.filter(
-                id__in=labor_ids,
-                database=database
-            )
-            if len(labor) != len(labor_ids):
-                raise serializers.ValidationError({
-                    'labor_ids': 'Uno o más recursos de mano de obra no existen o no pertenecen a la base de datos.'
-                })
+        for resource_data, model_class, resource_name in resource_validations:
+            for item in resource_data:
+                if 'id' in item:
+                    self._validate_resource_exists(
+                        item['id'],
+                        model_class,
+                        resource_name
+                    )
 
         return attrs
 
-    def create(self, validated_data):
-        material_ids = validated_data.pop('material_ids', [])
-        equipment_ids = validated_data.pop('equipment_ids', [])
-        labor_ids = validated_data.pop('labor_ids', [])
-        database_id = validated_data.pop('database_id')
+    def _process_resource_data(self, resource_data, model_class, resource_name):
+        existing_ids = []
+        to_create = []
 
-        database_instance = Database.objects.get(id=database_id)
+        for item in resource_data:
+            if 'id' in item:
+                existing_ids.append(item['id'])
+            else:
+                to_create.append(item)
+
+        return existing_ids, to_create
+
+    def create(self, validated_data):
+        # TODO: use transactions
+        materials_data = validated_data.pop('material', [])
+        equipment_data = validated_data.pop('equipment', [])
+        labor_data = validated_data.pop('labor', [])
+        budget_id = validated_data.pop('budget_id', [])
+
+        print('xxxxxxxxxxxxxxxxxxxx', self._get_database())
+
         work_item = WorkItem.objects.create(
-            database=database_instance,
+            database=self._get_database(),
             **validated_data
         )
 
-        if material_ids:
-            work_item.materials.set(material_ids)
-        if equipment_ids:
-            work_item.equipment.set(equipment_ids)
-        if labor_ids:
-            work_item.labor.set(labor_ids)
+        resource_mappings = [
+            (materials_data, MaterialSerializer, Material, 'material'),
+            (equipment_data, EquipmentSerializer, Equipment, 'equipo'),
+            (labor_data, LaborSerializer, Labor, 'mano de obra')
+        ]
+
+        for resource_data, serializer_class, model_class, resource_name in resource_mappings:
+            existing_ids, to_create = self._process_resource_data(
+                resource_data,
+                model_class,
+                resource_name
+            )
+            resources = self._save_resources(
+                serializer_class, to_create, model_class, existing_ids)
+
+            getattr(work_item, model_class.__name__.lower()).add(*resources)
+
+        Budget.objects.get(id=budget_id).work_item.add(work_item)
 
         return work_item
 
+    def _update_existing_resources(self, data, serializer_class, model_class):
+        updated_resources = []
+        for item in data:
+            if 'id' in item:
+                resource = model_class.objects.get(id=item['id'])
+                serializer = serializer_class(
+                    resource, data=item, partial=True)
+                if serializer.is_valid(raise_exception=True):
+                    updated_resources.append(serializer.save())
+        return updated_resources
+
     def update(self, instance, validated_data):
-        if 'material_ids' in validated_data:
-            instance.materials.set(validated_data.pop('material_ids'))
-        if 'equipment_ids' in validated_data:
-            instance.equipment.set(validated_data.pop('equipment_ids'))
-        if 'labor_ids' in validated_data:
-            instance.labor.set(validated_data.pop('labor_ids'))
+        materials_data = validated_data.pop('material', [])
+        equipment_data = validated_data.pop('equipment', [])
+        labor_data = validated_data.pop('labor', [])
 
-        if 'database_id' in validated_data:
-            database_id = validated_data.pop('database_id')
-            instance.database = Database.objects.get(id=database_id)
+        # Update basic fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
 
-        return super().update(instance, validated_data)
+        # Process each resource type
+        resource_mappings = [
+            (materials_data, MaterialSerializer, Material, instance.material),
+            (equipment_data, EquipmentSerializer, Equipment, instance.equipment),
+            (labor_data, LaborSerializer, Labor, instance.labor)
+        ]
+
+        for data, serializer_class, model_class, relation in resource_mappings:
+            if not data:
+                continue
+
+            # Update existing resources using serializers
+            self._update_existing_resources(
+                data,
+                serializer_class,
+                model_class
+            )
+
+            # Handle new resources
+            to_create = [item for item in data if 'id' not in item]
+            if to_create:
+                create_serializer = serializer_class(
+                    data=to_create,
+                    many=True,
+                    context=self.context
+                )
+                if create_serializer.is_valid(raise_exception=True):
+                    new_resources = create_serializer.save()
+                    # Solo añadimos los nuevos recursos a la relación
+                    relation.add(*new_resources)
+
+        return instance
+
+
+class WorkItemUpdateSerializer(BaseResourceSerializer):
+
+    material = MaterialSerializer(many=True, required=False)
+    equipment = EquipmentSerializer(many=True, required=False)
+    labor = LaborSerializer(many=True, required=False)
+    total_labor_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_labor_cost')
+    total_equipment_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_equipment_cost')
+    total_material_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_material_cost')
+    total_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_cost')
+
+    class Meta:
+        model = WorkItem
+        fields = [
+            'id',
+            'code',
+            'description',
+            'unit',
+            'material',
+            'equipment',
+            'labor',
+            'yield_rate',
+            'database',
+            'total_labor_cost',
+            'total_equipment_cost',
+            'total_material_cost',
+            'total_cost',
+            'covening_code',
+            'material_unit_usage',
+
+        ]
+        read_only_fields = [
+            'id',
+            'database',
+            'description',
+            'unit',
+            'yield_rate',
+            'covening_code',
+            'material_unit_usage',
+        ]
+
+    def _validate_resource_exists(self, resource_id, model_class, resource_name):
+        if self.instance:
+            return
+        try:
+            return model_class.objects.get(id=resource_id)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError({
+                resource_name: f'El {resource_name} con id {resource_id} no existe.'
+            })
+
+    def _save_resources(self, serializer_class, data, model_class, existing_ids):
+        resources = []
+
+        if data:
+            serializer = serializer_class(many=True, data=data)
+            if serializer.is_valid(raise_exception=True):
+                resources.extend(serializer.save())
+
+        if existing_ids:
+            resources.extend(model_class.objects.filter(id__in=existing_ids))
+
+        return resources
+
+    def validate(self, attrs):
+        # Si estamos actualizando (instance existe), verificar que los recursos pertenezcan al workitem
+        if self.instance:
+            resource_validations = [
+                (attrs.get('material', []), self.instance.material, 'material'),
+                (attrs.get('equipment', []), self.instance.equipment, 'equipo'),
+                (attrs.get('labor', []), self.instance.labor, 'mano de obra')
+            ]
+
+            for resource_data, resource_queryset, resource_name in resource_validations:
+                existing_ids = [item['id']
+                                for item in resource_data if 'id' in item]
+                if existing_ids:
+                    valid_ids = set(
+                        resource_queryset.values_list('id', flat=True))
+                    invalid_ids = set(existing_ids) - valid_ids
+                    if invalid_ids:
+                        raise serializers.ValidationError({
+                            resource_name: f'Los siguientes IDs de {resource_name} no están relacionados con este item: {invalid_ids}'
+                        })
+        return attrs
+
+    def _process_resource_data(self, resource_data, model_class, resource_name):
+        existing_ids = []
+        to_create = []
+
+        for item in resource_data:
+            if 'id' in item:
+                existing_ids.append(item['id'])
+            else:
+                to_create.append(item)
+
+        return existing_ids, to_create
+
+    def _update_existing_resources(self, data, serializer_class, model_class):
+        updated_resources = []
+        for item in data:
+
+            if 'id' in item:
+                resource = model_class.objects.get(id=item['id'])
+                serializer = serializer_class(
+                    instance=resource, data=item, partial=True)
+                if serializer.is_valid(raise_exception=True):
+                    updated_resources.append(serializer.save())
+        return updated_resources
+
+    def update(self, instance, validated_data):
+        materials_data = validated_data.pop('material', [])
+        equipment_data = validated_data.pop('equipment', [])
+        labor_data = validated_data.pop('labor', [])
+
+        # Update basic fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # # Process each resource type
+        resource_mappings = [
+            (materials_data, MaterialSerializer, Material, instance.material),
+            (equipment_data, EquipmentSerializer, Equipment, instance.equipment),
+            (labor_data, LaborSerializer, Labor, instance.labor)
+        ]
+
+        for data, serializer_class, model_class, relation in resource_mappings:
+            if not data:
+                continue
+
+        #     # Update existing resources using serializers
+            self._update_existing_resources(
+                data,
+                serializer_class,
+                model_class
+            )
+
+        #     # Handle new resources
+            to_create = [item for item in data if 'id' not in item]
+            if to_create:
+
+                create_serializer = serializer_class(
+                    data=to_create,
+                    many=True,
+                    context=self.context
+                )
+                if create_serializer.is_valid(raise_exception=True):
+                    new_resources = create_serializer.save()
+                    # Solo añadimos los nuevos recursos a la relación
+                    relation.add(*new_resources)
+
+        return instance
