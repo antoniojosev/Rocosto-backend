@@ -27,6 +27,143 @@ class DatabaseSerializer(serializers.ModelSerializer):
         fields = ['id', 'code', 'name', 'description', 'user']
 
 
+class DatabaseCountsSerializer(DatabaseSerializer):
+    total_materials = serializers.SerializerMethodField()
+    total_equipment = serializers.SerializerMethodField()
+    total_labor = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Database
+        fields = ['id', 'code', 'name', 'description', 'user',
+                  'total_materials', 'total_equipment', 'total_labor']
+
+    def get_total_materials(self, obj):
+        return obj.materials.count()
+
+    def get_total_equipment(self, obj):
+        return obj.equipment.count()
+
+    def get_total_labor(self, obj):
+        return obj.labor.count()
+
+
+class DatabaseWithResourcesSerializer(serializers.ModelSerializer):
+    resources = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Database
+        fields = '__all__'
+
+    def get_resources(self, obj):
+        resource_type = self.context.get('resource_type')
+        if resource_type == 'MAT':
+            materials = Material.objects.filter(database=obj)
+            return MaterialSerializer(materials, many=True).data
+        elif resource_type == 'EQU':
+            equipments = Equipment.objects.filter(database=obj)
+            return EquipmentSerializer(equipments, many=True).data
+        elif resource_type == 'LAB':
+            labors = Labor.objects.filter(database=obj)
+            return LaborSerializer(labors, many=True).data
+        return None
+
+
+class DatabaseWithResources1Serializer(DatabaseCountsSerializer):
+    data = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Database
+        fields = ['id', 'code', 'name', 'description', 'user',
+                  'total_materials', 'total_equipment', 'total_labor', 'data']
+
+    def get_data(self, obj):
+        request = self.context.get('request')
+        resource_type = request.query_params.get(
+            'resource_type', None) if request else None
+
+        if not resource_type:
+            return []
+
+        if resource_type == 'material':
+            return MaterialSerializer(obj.material_set.all(), many=True).data
+        elif resource_type == 'equipment':
+            return EquipmentSerializer(obj.equipment_set.all(), many=True).data
+        elif resource_type == 'labor':
+            return LaborSerializer(obj.labor_set.all(), many=True).data
+
+        return []
+
+
+class DatabaseResourceStatsSerializer(DatabaseCountsSerializer):
+    """
+    Serializer that handles both listing databases with counts and
+    retrieving a single database with paginated resources.
+    """
+    resources = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Database
+        fields = ['id', 'code', 'name', 'description', 'user',
+                  'total_materials', 'total_equipment', 'total_labor', 'resources']
+
+    def get_resources(self, obj):
+        # Only include resources in retrieve operations, not in list
+        if not self.context.get('is_retrieve', False):
+            return None
+
+        resource_type = self.context.get('resource_type')
+        if not resource_type:
+            return None
+
+        # Get pagination parameters from request
+        request = self.context.get('request')
+        page_size = request.query_params.get('page_size', 10)
+        page = request.query_params.get('page', 1)
+
+        try:
+            page_size = int(page_size)
+            page = int(page)
+        except ValueError:
+            page_size = 10
+            page = 1
+
+        # Calculate start and end indices for manual pagination
+        start = (page - 1) * page_size
+        end = start + page_size
+
+        # Get the appropriate resources based on resource_type
+        if resource_type == 'MAT':
+            queryset = Material.objects.filter(database=obj)
+            total = queryset.count()
+            materials = queryset[start:end]
+            items = MaterialSerializer(materials, many=True).data
+        elif resource_type == 'EQU':
+            queryset = Equipment.objects.filter(database=obj)
+            total = queryset.count()
+            equipments = queryset[start:end]
+            items = EquipmentSerializer(equipments, many=True).data
+        elif resource_type == 'LAB':
+            queryset = Labor.objects.filter(database=obj)
+            total = queryset.count()
+            labors = queryset[start:end]
+            items = LaborSerializer(labors, many=True).data
+        elif resource_type == 'WI':
+            queryset = WorkItem.objects.filter(database=obj)
+            total = queryset.count()
+            work_items = queryset[start:end]
+            items = WorkItemSerializer(work_items, many=True).data
+        else:
+            return None
+
+        # Return paginated result format
+        return {
+            'count': total,
+            'next': page < (total // page_size) + (1 if total % page_size > 0 else 0),
+            'previous': page > 1,
+            'results': items
+        }
+
+
 class BaseResourceSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(required=False)
     database = DatabaseSerializer(many=False, read_only=True)

@@ -1,0 +1,1267 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2025-03-24T23:50:58.921Z",
+    "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
+    "content_type": 13,
+    "object_id": "a7952a0b-0b7e-466a-ac51-bd753b05833f",
+    "object_repr": "shelby - 123456789",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2025-03-24T23:52:18.711Z",
+    "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
+    "content_type": 13,
+    "object_id": "fdc02b18-fd58-4877-aa3c-80566dc1b837",
+    "object_repr": "asdasdasdas - 12345678",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2025-03-24T23:58:37.437Z",
+    "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
+    "content_type": 8,
+    "object_id": "d690fdbf-36e8-4ffe-a0f4-0e8c5cb5c976",
+    "object_repr": "DB-001 - Dedault db",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2025-03-24T23:59:34.286Z",
+    "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
+    "content_type": 8,
+    "object_id": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9",
+    "object_repr": "DB-002 - Dedault db",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2025-03-25T00:04:32.728Z",
+    "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
+    "content_type": 9,
+    "object_id": "316d6e00-4baa-4e93-b090-85289d340d7a",
+    "object_repr": "metro cubico (m3)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2025-03-25T00:04:41.893Z",
+    "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
+    "content_type": 9,
+    "object_id": "3ebf0be0-8edc-47f5-aaff-68bc36c8ce28",
+    "object_repr": "Saco (sc)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 1,
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": 1,
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 2,
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": 1,
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 3,
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": 1,
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 4,
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": 1,
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 5,
+  "fields": {
+    "name": "Can add permission",
+    "content_type": 2,
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 6,
+  "fields": {
+    "name": "Can change permission",
+    "content_type": 2,
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 7,
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": 2,
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 8,
+  "fields": {
+    "name": "Can view permission",
+    "content_type": 2,
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 9,
+  "fields": {
+    "name": "Can add group",
+    "content_type": 3,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 10,
+  "fields": {
+    "name": "Can change group",
+    "content_type": 3,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 11,
+  "fields": {
+    "name": "Can delete group",
+    "content_type": 3,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 12,
+  "fields": {
+    "name": "Can view group",
+    "content_type": 3,
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 13,
+  "fields": {
+    "name": "Can add content type",
+    "content_type": 4,
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 14,
+  "fields": {
+    "name": "Can change content type",
+    "content_type": 4,
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 15,
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": 4,
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 16,
+  "fields": {
+    "name": "Can view content type",
+    "content_type": 4,
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 17,
+  "fields": {
+    "name": "Can add session",
+    "content_type": 5,
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 18,
+  "fields": {
+    "name": "Can change session",
+    "content_type": 5,
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 19,
+  "fields": {
+    "name": "Can delete session",
+    "content_type": 5,
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 20,
+  "fields": {
+    "name": "Can view session",
+    "content_type": 5,
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 21,
+  "fields": {
+    "name": "Can add user",
+    "content_type": 6,
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 22,
+  "fields": {
+    "name": "Can change user",
+    "content_type": 6,
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 23,
+  "fields": {
+    "name": "Can delete user",
+    "content_type": 6,
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 24,
+  "fields": {
+    "name": "Can view user",
+    "content_type": 6,
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 25,
+  "fields": {
+    "name": "Can add Equipment",
+    "content_type": 7,
+    "codename": "add_equipment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 26,
+  "fields": {
+    "name": "Can change Equipment",
+    "content_type": 7,
+    "codename": "change_equipment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 27,
+  "fields": {
+    "name": "Can delete Equipment",
+    "content_type": 7,
+    "codename": "delete_equipment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 28,
+  "fields": {
+    "name": "Can view Equipment",
+    "content_type": 7,
+    "codename": "view_equipment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 29,
+  "fields": {
+    "name": "Can add Database",
+    "content_type": 8,
+    "codename": "add_database"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 30,
+  "fields": {
+    "name": "Can change Database",
+    "content_type": 8,
+    "codename": "change_database"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 31,
+  "fields": {
+    "name": "Can delete Database",
+    "content_type": 8,
+    "codename": "delete_database"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 32,
+  "fields": {
+    "name": "Can view Database",
+    "content_type": 8,
+    "codename": "view_database"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 33,
+  "fields": {
+    "name": "Can add Unit",
+    "content_type": 9,
+    "codename": "add_unit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 34,
+  "fields": {
+    "name": "Can change Unit",
+    "content_type": 9,
+    "codename": "change_unit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 35,
+  "fields": {
+    "name": "Can delete Unit",
+    "content_type": 9,
+    "codename": "delete_unit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 36,
+  "fields": {
+    "name": "Can view Unit",
+    "content_type": 9,
+    "codename": "view_unit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 37,
+  "fields": {
+    "name": "Can add Labor",
+    "content_type": 10,
+    "codename": "add_labor"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 38,
+  "fields": {
+    "name": "Can change Labor",
+    "content_type": 10,
+    "codename": "change_labor"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 39,
+  "fields": {
+    "name": "Can delete Labor",
+    "content_type": 10,
+    "codename": "delete_labor"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 40,
+  "fields": {
+    "name": "Can view Labor",
+    "content_type": 10,
+    "codename": "view_labor"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 41,
+  "fields": {
+    "name": "Can add Work Item",
+    "content_type": 11,
+    "codename": "add_workitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 42,
+  "fields": {
+    "name": "Can change Work Item",
+    "content_type": 11,
+    "codename": "change_workitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 43,
+  "fields": {
+    "name": "Can delete Work Item",
+    "content_type": 11,
+    "codename": "delete_workitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 44,
+  "fields": {
+    "name": "Can view Work Item",
+    "content_type": 11,
+    "codename": "view_workitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 45,
+  "fields": {
+    "name": "Can add Material",
+    "content_type": 12,
+    "codename": "add_material"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 46,
+  "fields": {
+    "name": "Can change Material",
+    "content_type": 12,
+    "codename": "change_material"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 47,
+  "fields": {
+    "name": "Can delete Material",
+    "content_type": 12,
+    "codename": "delete_material"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 48,
+  "fields": {
+    "name": "Can view Material",
+    "content_type": 12,
+    "codename": "view_material"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 49,
+  "fields": {
+    "name": "Can add Company",
+    "content_type": 13,
+    "codename": "add_company"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 50,
+  "fields": {
+    "name": "Can change Company",
+    "content_type": 13,
+    "codename": "change_company"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 51,
+  "fields": {
+    "name": "Can delete Company",
+    "content_type": 13,
+    "codename": "delete_company"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 52,
+  "fields": {
+    "name": "Can view Company",
+    "content_type": 13,
+    "codename": "view_company"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 53,
+  "fields": {
+    "name": "Can add retention",
+    "content_type": 14,
+    "codename": "add_retention"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 54,
+  "fields": {
+    "name": "Can change retention",
+    "content_type": 14,
+    "codename": "change_retention"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 55,
+  "fields": {
+    "name": "Can delete retention",
+    "content_type": 14,
+    "codename": "delete_retention"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 56,
+  "fields": {
+    "name": "Can view retention",
+    "content_type": 14,
+    "codename": "view_retention"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 57,
+  "fields": {
+    "name": "Can add budget",
+    "content_type": 15,
+    "codename": "add_budget"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 58,
+  "fields": {
+    "name": "Can change budget",
+    "content_type": 15,
+    "codename": "change_budget"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 59,
+  "fields": {
+    "name": "Can delete budget",
+    "content_type": 15,
+    "codename": "delete_budget"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 60,
+  "fields": {
+    "name": "Can view budget",
+    "content_type": 15,
+    "codename": "view_budget"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 61,
+  "fields": {
+    "name": "Can add bond",
+    "content_type": 16,
+    "codename": "add_bond"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 62,
+  "fields": {
+    "name": "Can change bond",
+    "content_type": 16,
+    "codename": "change_bond"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 63,
+  "fields": {
+    "name": "Can delete bond",
+    "content_type": 16,
+    "codename": "delete_bond"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 64,
+  "fields": {
+    "name": "Can view bond",
+    "content_type": 16,
+    "codename": "view_bond"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 1,
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 2,
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 4,
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 5,
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 6,
+  "fields": {
+    "app_label": "users",
+    "model": "user"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 7,
+  "fields": {
+    "app_label": "databases",
+    "model": "equipment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 8,
+  "fields": {
+    "app_label": "databases",
+    "model": "database"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 9,
+  "fields": {
+    "app_label": "databases",
+    "model": "unit"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 10,
+  "fields": {
+    "app_label": "databases",
+    "model": "labor"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 11,
+  "fields": {
+    "app_label": "databases",
+    "model": "workitem"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 12,
+  "fields": {
+    "app_label": "databases",
+    "model": "material"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 13,
+  "fields": {
+    "app_label": "companies",
+    "model": "company"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 14,
+  "fields": {
+    "app_label": "budgets",
+    "model": "retention"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 15,
+  "fields": {
+    "app_label": "budgets",
+    "model": "budget"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 16,
+  "fields": {
+    "app_label": "budgets",
+    "model": "bond"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "1riawg129y6lf5dg0xitkk300v2x5k33",
+  "fields": {
+    "session_data": ".eJxVjDkOwjAQAP_iGkc-1zElEjUVdbRrbxQLMFGOCvF3EokC2hnNvESH6zJ068xTV7I4ihZAMVOSAIzSkVaSApP0SMZFDehMFIffjDDduO4tjuPc7Gxuds11KQmX8qzN-YHlfpmum6v44NM3-fsMOA_bJLk-sE4huhSBjCaOKtuoVfIUlTEIOTiLoCxHR8pTCC0CYZut7T234v0BWVxEUQ:1twrVB:TdYTlQu4bjuk9SdjyQC9ZsaiL-hgVcTI-YyzSwlCDWI",
+    "expire_date": "2025-04-07T23:46:41.536Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "azjsnorp0wdscz19nkee9n9wzybh5gmh",
+  "fields": {
+    "session_data": ".eJxVjj0LwjAURf9LZluavHw6Cs5OzuUleaFBjaVpJ_G_m4KDbpdzOZf7YiNu6zRulZYxR3ZkURqE5G3n0kCd1NBSpKGDZATXJJ3zkh1-NY_hRmV3cZ5rv7Pa7zWVNQdc87P05wfm-2W5tq7gg05f5W9nwjq1ETsENNwII2yISUmKyI01RGDbGWkUNKI9aae804oQISYBQIGjdymw9wcx_UTg:1tr1Rp:dhX-ZTUiM_meDQ5WXs_8EZ_f2t35Py8Er1afjQYKv8U",
+    "expire_date": "2025-03-22T21:11:05.737Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "d9bj8sa524u8v88vrp1cxwywab5bxy6v",
+  "fields": {
+    "session_data": ".eJxVjj0LwjAURf9LZluavHw6Cs5OzuUleaFBjaVpJ_G_m4KDbpdzOZf7YiNu6zRulZYxR3ZkURqE5G3n0kCd1NBSpKGDZATXJJ3zkh1-NY_hRmV3cZ5rv7Pa7zWVNQdc87P05wfm-2W5tq7gg05f5W9nwjq1ETsENNwII2yISUmKyI01RGDbGWkUNKI9aae804oQISYBQIGjdymw9wcx_UTg:1thgUe:APkNKlHIHjH1QvxKvGZUjsyDvsBZobWr7hehY3Uw-7w",
+    "expire_date": "2025-02-25T02:59:24.267Z"
+  }
+},
+{
+  "model": "users.user",
+  "pk": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$csbVHsLOWcQRDLy5ZrWPJQ$EF9o6BkAotkAzHafo8Lt8bI0zUk646qq9UeP5xkUEbk=",
+    "last_login": "2025-03-24T23:46:41.524Z",
+    "is_superuser": true,
+    "username": "admin2",
+    "first_name": "",
+    "email": "admin2@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-03-24T23:46:28.314Z",
+    "created_at": "2025-03-24T23:46:29.033Z",
+    "updated_at": "2025-03-24T23:46:29.033Z",
+    "deleted_at": null,
+    "name": "",
+    "last_name": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "budgets.budget",
+  "pk": "b2941173-cc8d-4c1e-a1d6-f57fb10494e3",
+  "fields": {
+    "created_at": "2025-03-24T23:53:48.725Z",
+    "updated_at": "2025-03-24T23:53:48.725Z",
+    "deleted_at": null,
+    "state": "IN_PROGRESS",
+    "code": "PART-001",
+    "contract": "",
+    "budget_date": "2025-03-24",
+    "name": "Mi primer apu",
+    "owner": "admin2@gmail.com",
+    "calculated_by": "admin2@gmail.com",
+    "reviewed_by": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
+    "hours_per_day": "8.00",
+    "currency": "USD",
+    "use_associated_cost_factor": false,
+    "direct_labor_factor": "1.00",
+    "iva_type": "NO_IVA",
+    "iva_percentage": "1.00",
+    "administration_percentage": "11.00",
+    "utility_percentage": "1.00",
+    "financing_percentage": "1.00",
+    "use_medical_insurance": true,
+    "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
+    "company": "fdc02b18-fd58-4877-aa3c-80566dc1b837",
+    "work_item": [
+      "c2fe17ed-c54b-4caf-9872-66a9ead95b7c",
+      "ddab0b05-652e-4451-8713-e4531554e43d"
+    ]
+  }
+},
+{
+  "model": "companies.company",
+  "pk": "fdc02b18-fd58-4877-aa3c-80566dc1b837",
+  "fields": {
+    "created_at": "2025-03-24T23:52:18.704Z",
+    "updated_at": "2025-03-24T23:52:18.704Z",
+    "deleted_at": null,
+    "tax_id": "12345678",
+    "name": "asdasdasdas",
+    "address": "asd",
+    "phone": "+58",
+    "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
+    "owners": [
+      "8660eebc-66ea-4b10-b7eb-5ab24916a429"
+    ]
+  }
+},
+{
+  "model": "databases.unit",
+  "pk": "316d6e00-4baa-4e93-b090-85289d340d7a",
+  "fields": {
+    "created_at": "2025-03-25T00:04:32.726Z",
+    "updated_at": "2025-03-25T00:04:32.726Z",
+    "deleted_at": null,
+    "name": "metro cubico",
+    "symbol": "m3"
+  }
+},
+{
+  "model": "databases.unit",
+  "pk": "3ebf0be0-8edc-47f5-aaff-68bc36c8ce28",
+  "fields": {
+    "created_at": "2025-03-25T00:04:41.891Z",
+    "updated_at": "2025-03-25T00:04:41.891Z",
+    "deleted_at": null,
+    "name": "Saco",
+    "symbol": "sc"
+  }
+},
+{
+  "model": "databases.database",
+  "pk": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9",
+  "fields": {
+    "created_at": "2025-03-24T23:59:34.283Z",
+    "updated_at": "2025-03-25T00:02:57.276Z",
+    "deleted_at": null,
+    "code": "DB-002",
+    "name": "Dedault db",
+    "description": "my default db",
+    "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429"
+  }
+},
+{
+  "model": "databases.material",
+  "pk": "291a9711-6f35-4992-a2f8-e091c80501ad",
+  "fields": {
+    "created_at": "2025-03-25T18:32:14.819Z",
+    "updated_at": "2025-03-27T00:52:19.626Z",
+    "deleted_at": null,
+    "code": "MAT-999",
+    "description": "Luz",
+    "unit": "316d6e00-4baa-4e93-b090-85289d340d7a",
+    "cost": "10.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.material",
+  "pk": "56af04f6-8f5d-49dd-ada6-45b5621ef264",
+  "fields": {
+    "created_at": "2025-03-25T00:14:07.297Z",
+    "updated_at": "2025-03-27T01:09:04.545Z",
+    "deleted_at": null,
+    "code": "MAT-003",
+    "description": "Agua por tobo",
+    "unit": "316d6e00-4baa-4e93-b090-85289d340d7a",
+    "cost": "30.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.material",
+  "pk": "67e1fc5a-3454-4ee7-bfd9-13038cb498b4",
+  "fields": {
+    "created_at": "2025-03-25T18:35:26.900Z",
+    "updated_at": "2025-03-27T00:52:19.636Z",
+    "deleted_at": null,
+    "code": "MAT-888",
+    "description": "Tierrass",
+    "unit": "316d6e00-4baa-4e93-b090-85289d340d7a",
+    "cost": "1.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.material",
+  "pk": "7c7a8445-b9b1-4efd-a8e6-aeba77bba677",
+  "fields": {
+    "created_at": "2025-03-26T18:22:35.028Z",
+    "updated_at": "2025-03-27T00:52:19.643Z",
+    "deleted_at": null,
+    "code": "MAT-777",
+    "description": "aguas",
+    "unit": "316d6e00-4baa-4e93-b090-85289d340d7a",
+    "cost": "1.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.material",
+  "pk": "86ea1be1-7050-477c-94d1-01c966d92d60",
+  "fields": {
+    "created_at": "2025-03-25T00:05:18.311Z",
+    "updated_at": "2025-03-27T01:09:04.560Z",
+    "deleted_at": null,
+    "code": "MAT-001",
+    "description": "cemento",
+    "unit": "316d6e00-4baa-4e93-b090-85289d340d7a",
+    "cost": "10.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.material",
+  "pk": "8ca600bb-f2ed-41af-99e8-e91a20acb991",
+  "fields": {
+    "created_at": "2025-03-26T19:24:50.219Z",
+    "updated_at": "2025-03-27T00:52:19.669Z",
+    "deleted_at": null,
+    "code": "MAT-155",
+    "description": "Sangre",
+    "unit": "316d6e00-4baa-4e93-b090-85289d340d7a",
+    "cost": "1.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.material",
+  "pk": "9deec108-6742-4321-bf91-b5e87f792971",
+  "fields": {
+    "created_at": "2025-03-25T00:05:18.324Z",
+    "updated_at": "2025-03-27T01:09:04.573Z",
+    "deleted_at": null,
+    "code": "MAT-002",
+    "description": "Saco de arena",
+    "unit": "3ebf0be0-8edc-47f5-aaff-68bc36c8ce28",
+    "cost": "10.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.material",
+  "pk": "c5926071-8575-40fd-9116-03dddfb17118",
+  "fields": {
+    "created_at": "2025-03-26T19:16:12.588Z",
+    "updated_at": "2025-03-27T00:52:19.725Z",
+    "deleted_at": null,
+    "code": "MAT-756",
+    "description": "Fuego",
+    "unit": "316d6e00-4baa-4e93-b090-85289d340d7a",
+    "cost": "3.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.equipment",
+  "pk": "29a87bf4-961f-4e34-b28a-360db7c5b5bf",
+  "fields": {
+    "created_at": "2025-03-25T00:08:04.311Z",
+    "updated_at": "2025-03-25T00:08:04.311Z",
+    "deleted_at": null,
+    "code": "",
+    "description": "Carretilla",
+    "cost": "2.00",
+    "depreciation": "0.10",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.equipment",
+  "pk": "310d9911-3b23-4910-ad3d-a5873aaa1610",
+  "fields": {
+    "created_at": "2025-03-25T00:10:50.691Z",
+    "updated_at": "2025-03-27T00:52:19.750Z",
+    "deleted_at": null,
+    "code": "EQU-045",
+    "description": "Carretillas",
+    "cost": "2.00",
+    "depreciation": "0.10",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.equipment",
+  "pk": "5ea19218-f461-4278-99b9-42134ef3b661",
+  "fields": {
+    "created_at": "2025-03-25T18:38:31.485Z",
+    "updated_at": "2025-03-27T01:09:04.581Z",
+    "deleted_at": null,
+    "code": "EQU-444",
+    "description": "mi equipo",
+    "cost": "10.00",
+    "depreciation": "1.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.equipment",
+  "pk": "6df6e203-a373-4ee6-bdfa-dc36a0d3c9e5",
+  "fields": {
+    "created_at": "2025-03-26T18:26:25.170Z",
+    "updated_at": "2025-03-27T01:09:04.601Z",
+    "deleted_at": null,
+    "code": "EQU-454",
+    "description": "Mi tercer equipo",
+    "cost": "3.00",
+    "depreciation": "1.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.equipment",
+  "pk": "a176bffc-ca84-46c5-841e-4fb1477a1cf7",
+  "fields": {
+    "created_at": "2025-03-25T17:23:26.425Z",
+    "updated_at": "2025-03-27T00:52:19.772Z",
+    "deleted_at": null,
+    "code": "EQU-047",
+    "description": "Brocha",
+    "cost": "15.00",
+    "depreciation": "0.10",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.equipment",
+  "pk": "b6377039-4f1d-4b9f-96c9-790fc54c64f1",
+  "fields": {
+    "created_at": "2025-03-25T00:10:50.703Z",
+    "updated_at": "2025-03-27T00:52:19.789Z",
+    "deleted_at": null,
+    "code": "EQU-046",
+    "description": "Espatula",
+    "cost": "10.00",
+    "depreciation": "0.30",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.equipment",
+  "pk": "e08e97ce-8012-4189-b00f-4f07dd1b6de0",
+  "fields": {
+    "created_at": "2025-03-26T17:56:24.765Z",
+    "updated_at": "2025-03-27T01:09:04.610Z",
+    "deleted_at": null,
+    "code": "EQU-333",
+    "description": "Mi segundo equipo",
+    "cost": "2.00",
+    "depreciation": "1.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.labor",
+  "pk": "185f35f8-b55c-4e38-84e4-10ef19a4a2e4",
+  "fields": {
+    "created_at": "2025-03-25T00:10:50.743Z",
+    "updated_at": "2025-03-27T00:52:19.806Z",
+    "deleted_at": null,
+    "code": "LAB-002",
+    "description": "Mezclador de semento",
+    "hourly_cost": "10.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.labor",
+  "pk": "25925a20-722c-44ad-aa27-3c6d86d3d02a",
+  "fields": {
+    "created_at": "2025-03-26T18:11:37.102Z",
+    "updated_at": "2025-03-27T01:09:04.616Z",
+    "deleted_at": null,
+    "code": "LAB-444",
+    "description": "Descripcion de lab",
+    "hourly_cost": "3.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.labor",
+  "pk": "69311531-c7cf-414d-ab9b-3b26d8c32e33",
+  "fields": {
+    "created_at": "2025-03-25T00:10:50.728Z",
+    "updated_at": "2025-03-27T00:52:19.815Z",
+    "deleted_at": null,
+    "code": "LAB-001",
+    "description": "ayudante para frizar pared",
+    "hourly_cost": "10.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.labor",
+  "pk": "724df1d8-78c8-439b-bb4f-865b33d1f9a8",
+  "fields": {
+    "created_at": "2025-03-26T18:59:53.402Z",
+    "updated_at": "2025-03-27T00:52:19.822Z",
+    "deleted_at": null,
+    "code": "LAB-033",
+    "description": "Desnudate mujer",
+    "hourly_cost": "2.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.labor",
+  "pk": "c84460bd-8462-460c-b29b-af46d4b28085",
+  "fields": {
+    "created_at": "2025-03-26T18:57:57.443Z",
+    "updated_at": "2025-03-27T01:09:04.632Z",
+    "deleted_at": null,
+    "code": "LAB-553",
+    "description": "Descripcion selestial",
+    "hourly_cost": "3.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.labor",
+  "pk": "c8622bc1-660c-46fe-ad03-24289b3eab63",
+  "fields": {
+    "created_at": "2025-03-25T18:41:49.023Z",
+    "updated_at": "2025-03-27T01:09:04.647Z",
+    "deleted_at": null,
+    "code": "LAB-333",
+    "description": "Descr9p",
+    "hourly_cost": "190.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9"
+  }
+},
+{
+  "model": "databases.workitem",
+  "pk": "c2fe17ed-c54b-4caf-9872-66a9ead95b7c",
+  "fields": {
+    "created_at": "2025-03-25T00:05:40.993Z",
+    "updated_at": "2025-03-27T00:52:19.612Z",
+    "deleted_at": null,
+    "code": "PART-003",
+    "description": "Mi segunda partida",
+    "unit": "m3",
+    "yield_rate": "1.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9",
+    "covening_code": "1235",
+    "material_unit_usage": "DIVIDED",
+    "material": [
+      "291a9711-6f35-4992-a2f8-e091c80501ad",
+      "67e1fc5a-3454-4ee7-bfd9-13038cb498b4",
+      "7c7a8445-b9b1-4efd-a8e6-aeba77bba677",
+      "8ca600bb-f2ed-41af-99e8-e91a20acb991",
+      "c5926071-8575-40fd-9116-03dddfb17118"
+    ],
+    "labor": [
+      "185f35f8-b55c-4e38-84e4-10ef19a4a2e4",
+      "69311531-c7cf-414d-ab9b-3b26d8c32e33",
+      "724df1d8-78c8-439b-bb4f-865b33d1f9a8"
+    ],
+    "equipment": [
+      "310d9911-3b23-4910-ad3d-a5873aaa1610",
+      "a176bffc-ca84-46c5-841e-4fb1477a1cf7",
+      "b6377039-4f1d-4b9f-96c9-790fc54c64f1"
+    ]
+  }
+},
+{
+  "model": "databases.workitem",
+  "pk": "ddab0b05-652e-4451-8713-e4531554e43d",
+  "fields": {
+    "created_at": "2025-03-25T00:03:05.791Z",
+    "updated_at": "2025-03-27T01:09:04.520Z",
+    "deleted_at": null,
+    "code": "PART-002",
+    "description": "Mi primera partida",
+    "unit": "m3",
+    "yield_rate": "1.00",
+    "database": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9",
+    "covening_code": "123",
+    "material_unit_usage": "DIVIDED",
+    "material": [
+      "56af04f6-8f5d-49dd-ada6-45b5621ef264",
+      "86ea1be1-7050-477c-94d1-01c966d92d60",
+      "9deec108-6742-4321-bf91-b5e87f792971"
+    ],
+    "labor": [
+      "25925a20-722c-44ad-aa27-3c6d86d3d02a",
+      "c84460bd-8462-460c-b29b-af46d4b28085",
+      "c8622bc1-660c-46fe-ad03-24289b3eab63"
+    ],
+    "equipment": [
+      "5ea19218-f461-4278-99b9-42134ef3b661",
+      "6df6e203-a373-4ee6-bdfa-dc36a0d3c9e5",
+      "e08e97ce-8012-4189-b00f-4f07dd1b6de0"
+    ]
+  }
+}
+]
