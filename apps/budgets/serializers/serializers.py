@@ -38,6 +38,9 @@ class BudgetSerializer(serializers.ModelSerializer):
     retentions = RetentionSerializer(many=True, required=False)
     work_item = WorkItemSerializer(many=True, required=False)
     company = CompanyPublicSerializer(many=False)
+    owner = UserSerializer(many=False, read_only=True)
+    calculated_by = UserSerializer(many=False, read_only=True)
+    reviewed_by = UserSerializer(many=False, read_only=True)
 
     class Meta:
         model = Budget
@@ -218,3 +221,99 @@ class BudgetCreateSerializer(serializers.ModelSerializer):
         budget = Budget.objects.create(**validated_data)
 
         return budget
+
+
+class BudgetUpdateSerializer(serializers.ModelSerializer):
+    company_id = serializers.UUIDField(write_only=True)
+    owner_id = serializers.UUIDField(write_only=True)
+    calculated_by_id = serializers.UUIDField(write_only=True)
+    reviewed_by_id = serializers.UUIDField(write_only=True)
+    company = CompanyPublicSerializer(many=False, read_only=True)
+    owner = UserSerializer(many=False, read_only=True)
+    calculated_by = UserSerializer(many=False, read_only=True)
+    reviewed_by = UserSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Budget
+        fields = [
+            'id',
+            'code',
+            'name',
+            'owner_id',
+            'calculated_by_id',
+            'reviewed_by_id',
+            'direct_labor_factor',
+            'iva_type',
+            'iva_percentage',
+            'administration_percentage',
+            'utility_percentage',
+            'financing_percentage',
+            'use_medical_insurance',
+            'company_id',
+            'use_associated_cost_factor',
+            'company',
+            'owner',
+            'calculated_by',
+            'reviewed_by',
+        ]
+        read_only_fields = [
+            'company',
+            'owner',
+            'calculated_by',
+            'reviewed_by',
+        ]
+
+    def validate_company_id(self, value):
+        if not Company.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Company does not exist.")
+        return value
+
+    def validate_owner_id(self, value):
+        if not User.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Owner does not exist.")
+        return value
+
+    def validate_calculated_by_id(self, value):
+        if not User.objects.filter(id=value).exists():
+            raise serializers.ValidationError(
+                "Calculated by user does not exist.")
+        return value
+
+    def validate_reviewed_by_id(self, value):
+        if not User.objects.filter(id=value).exists():
+            raise serializers.ValidationError(
+                "Reviewed by user does not exist.")
+        return value
+
+    def update(self, instance, validated_data):
+        # Process ID fields
+        if 'company_id' in validated_data:
+            company_id = validated_data.pop('company_id')
+            instance.company = Company.objects.get(id=company_id)
+
+        if 'owner_id' in validated_data:
+            owner_id = validated_data.pop('owner_id')
+            instance.owner = User.objects.get(id=owner_id)
+
+        if 'calculated_by_id' in validated_data:
+            calculated_by_id = validated_data.pop('calculated_by_id')
+            instance.calculated_by = User.objects.get(id=calculated_by_id)
+
+        if 'reviewed_by_id' in validated_data:
+            reviewed_by_id = validated_data.pop('reviewed_by_id')
+            instance.reviewed_by = User.objects.get(id=reviewed_by_id)
+
+        # Update the allowed fields
+        fields_to_update = [
+            'code', 'name', 'direct_labor_factor',
+            'iva_type', 'iva_percentage', 'administration_percentage',
+            'utility_percentage', 'financing_percentage',
+            'use_medical_insurance', 'use_associated_cost_factor'
+        ]
+
+        for field in fields_to_update:
+            if field in validated_data:
+                setattr(instance, field, validated_data[field])
+
+        instance.save()
+        return instance

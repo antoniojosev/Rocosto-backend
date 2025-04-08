@@ -46,11 +46,19 @@ class Budget(BaseModel):
     name = models.CharField(
         max_length=255
     )
-    owner = models.CharField(
-        max_length=255
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='owned_budgets'
     )
-    calculated_by = models.CharField(
-        max_length=100
+    calculated_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='calculated_budgets'
     )
     reviewed_by = models.ForeignKey(
         User,

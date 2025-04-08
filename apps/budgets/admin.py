@@ -6,8 +6,8 @@ from .models import Bond, Budget, Retention
 @admin.register(Budget)
 class BudgetAdmin(admin.ModelAdmin):
     list_display = ('code', 'name', 'contract',
-                    'budget_date', 'owner', 'currency')
-    search_fields = ('code', 'name', 'contract', 'owner')
+                    'budget_date', 'currency')
+    search_fields = ('code', 'name', 'contract')
     list_filter = ('currency', 'iva_type', 'use_associated_cost_factor')
 
 
