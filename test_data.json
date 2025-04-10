@@ -1054,14 +1054,16 @@
     "pk": "fdc02b18-fd58-4877-aa3c-80566dc1b837",
     "fields": {
         "created_at": "2025-03-24T23:52:18.704Z",
-        "updated_at": "2025-04-08T19:45:43.637Z",
+        "updated_at": "2025-04-10T01:50:21.342Z",
         "deleted_at": null,
         "tax_id": "12345678",
         "name": "asdasdasdas",
         "address": "asd",
         "phone": "+58",
-        "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429",
-        "owners": []
+        "user": "086c9987-5342-4a5f-bc95-f6dfadae3f24",
+        "owners": [
+            "086c9987-5342-4a5f-bc95-f6dfadae3f24"
+        ]
     }
 },
 {
@@ -1091,12 +1093,12 @@
     "pk": "bcc4073d-befb-4f9a-9a66-1e4496f8ede9",
     "fields": {
         "created_at": "2025-03-24T23:59:34.283Z",
-        "updated_at": "2025-03-25T00:02:57.276Z",
+        "updated_at": "2025-04-10T01:48:22.482Z",
         "deleted_at": null,
         "code": "DB-002",
         "name": "Dedault db",
         "description": "my default db",
-        "user": "8660eebc-66ea-4b10-b7eb-5ab24916a429"
+        "user": "086c9987-5342-4a5f-bc95-f6dfadae3f24"
     }
 },
 {
