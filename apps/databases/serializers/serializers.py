@@ -20,22 +20,71 @@ class UnitSerializer(serializers.ModelSerializer):
 
 
 class DatabaseSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    user_id = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(), write_only=True)
+    user = UserSerializer(many=False, read_only=True)
 
     class Meta:
         model = Database
-        fields = ['id', 'code', 'name', 'description', 'user']
+        fields = [
+            'id',
+            'code',
+            'name',
+            'description',
+            'user',
+            'user_id'
+        ]
+        read_only_fields = ['id', 'user']
+
+    def validate_code(self, value):
+        request = self.context.get('request')
+        if request and request.method == 'PUT' or self.instance:
+            return value
+
+        # Validar que no exista otro database con el mismo código para el mismo usuario
+        user = self.context.get('request').user
+        if Database.objects.filter(code=value, user=user).exists():
+            raise serializers.ValidationError(
+                'Ya existe una base de datos con este código.'
+            )
+        return value
+
+    def create(self, validated_data):
+        user = validated_data.pop('user_id')
+        database = Database.objects.create(
+            user=user,
+            **validated_data
+        )
+        return database
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 
 class DatabaseCountsSerializer(DatabaseSerializer):
     total_materials = serializers.SerializerMethodField()
     total_equipment = serializers.SerializerMethodField()
     total_labor = serializers.SerializerMethodField()
+    user_id = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(), write_only=True)
+    user = UserSerializer(many=False, read_only=True)
 
     class Meta:
         model = Database
-        fields = ['id', 'code', 'name', 'description', 'user',
-                  'total_materials', 'total_equipment', 'total_labor']
+        fields = [
+            'id',
+            'code',
+            'name',
+            'description',
+            'user_id',
+            'user',
+            'total_materials',
+            'total_equipment',
+            'total_labor'
+        ]
 
     def get_total_materials(self, obj):
         return obj.materials.count()
@@ -45,6 +94,39 @@ class DatabaseCountsSerializer(DatabaseSerializer):
 
     def get_total_labor(self, obj):
         return obj.labor.count()
+
+    def validate_user_id(self, value):
+        request = self.context.get('request')
+        if request and request.method == 'PUT' or self.instance:
+            return value.id
+        return value
+
+    def validate_code(self, value):
+        request = self.context.get('request')
+        if request and request.method == 'PUT' or self.instance:
+            return value
+
+        # Validar que no exista otro database con el mismo código para el mismo usuario
+        user = self.context.get('request').user
+        if Database.objects.filter(code=value, user=user).exists():
+            raise serializers.ValidationError(
+                'Ya existe una base de datos con este código.'
+            )
+        return value
+
+    def create(self, validated_data):
+        user = validated_data.pop('user_id')
+        database = Database.objects.create(
+            user=user,
+            **validated_data
+        )
+        return database
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 
 class DatabaseWithResourcesSerializer(serializers.ModelSerializer):
@@ -702,4 +784,114 @@ class WorkItemUpdateSerializer(BaseResourceSerializer):
                     # Solo añadimos los nuevos recursos a la relación
                     relation.add(*new_resources)
 
+        return instance
+
+
+# Nuevo serializer para WorkItems asociados directamente a Database
+class DatabaseWorkItemSerializer(BaseResourceSerializer):
+    """
+    Serializer para WorkItem asociados directamente a una base de datos
+    sin necesidad de asignarlos a un presupuesto.
+    """
+    unit_id = serializers.UUIDField(write_only=True, required=False)
+    database_id = serializers.UUIDField(write_only=True, required=True)
+    material = MaterialSerializer(many=True, required=False, read_only=True)
+    equipment = EquipmentSerializer(many=True, required=False, read_only=True)
+    labor = LaborSerializer(many=True, required=False, read_only=True)
+    total_labor_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_labor_cost')
+    total_equipment_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_equipment_cost')
+    total_material_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_material_cost')
+    total_cost = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True, source='get_total_cost')
+
+    class Meta:
+        model = WorkItem
+        fields = [
+            'id',
+            'code',
+            'description',
+            'unit',
+            'unit_id',
+            'material',
+            'equipment',
+            'labor',
+            'yield_rate',
+            'database',
+            'database_id',
+            'total_labor_cost',
+            'total_equipment_cost',
+            'total_material_cost',
+            'total_cost',
+            'covening_code',
+            'material_unit_usage',
+        ]
+        read_only_fields = ['id', 'database']
+
+    def validate_database_id(self, value):
+        if self.instance:
+            return value
+        try:
+            Database.objects.get(id=value)
+            return value
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError(
+                'La base de datos especificada no existe.'
+            )
+
+    def validate_unit_id(self, value):
+        if value:
+            try:
+                Unit.objects.get(id=value)
+                return value
+            except ObjectDoesNotExist as exc:
+                raise serializers.ValidationError(
+                    "La unidad especificada no existe.") from exc
+        return value
+
+    def validate_yield_rate(self, value):
+        if self.instance:
+            return value
+        if value <= 0:
+            raise serializers.ValidationError(
+                'El rendimiento debe ser mayor que cero.'
+            )
+        return value
+
+    def create(self, validated_data):
+        database_id = validated_data.pop('database_id')
+        unit_id = validated_data.pop('unit_id', None)
+
+        # Obtener la base de datos
+        database = Database.objects.get(id=database_id)
+
+        # Crear el WorkItem
+        work_item = WorkItem.objects.create(
+            database=database,
+            **validated_data
+        )
+
+        # Si se proporcionó unit_id, establecer la unidad
+        if unit_id:
+            work_item.unit = Unit.objects.get(id=unit_id).symbol
+            work_item.save()
+
+        return work_item
+
+    def update(self, instance, validated_data):
+        # Eliminar campos que no deben actualizarse directamente
+        validated_data.pop('database_id', None)
+        unit_id = validated_data.pop('unit_id', None)
+
+        # Si se proporcionó unit_id, actualizar la unidad
+        if unit_id:
+            instance.unit = Unit.objects.get(id=unit_id).symbol
+
+        # Actualizar los campos básicos
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
         return instance

@@ -4,8 +4,11 @@ from rest_framework.response import Response
 
 from ..models import Database, Equipment, Labor, Material, Unit, WorkItem
 from ..serializers.serializers import (
+    DatabaseWorkItemSerializer,  # Añadir el nuevo serializer aquí
+)
+from ..serializers.serializers import (
+    DatabaseCountsSerializer,
     DatabaseResourceStatsSerializer,
-    DatabaseSerializer,
     EquipmentSerializer,
     LaborSerializer,
     MaterialSerializer,
@@ -24,7 +27,7 @@ class UnitViewSet(viewsets.ModelViewSet):
 
 class DatabaseViewSet(viewsets.ModelViewSet):
     queryset = Database.objects.all()
-    serializer_class = DatabaseSerializer
+    serializer_class = DatabaseCountsSerializer
 
 
 class DatabaseResourceStatsViewSet(viewsets.ReadOnlyModelViewSet):
@@ -121,3 +124,21 @@ class WorkItemViewSet(viewsets.ModelViewSet):
     def get_object(self):
         # Asegúrate de que obtienes la instancia de WorkItem correctamente
         return self.queryset.get(id=self.kwargs['pk'])
+
+
+# Nueva clase para el WorkItem basado en Database
+class DatabaseWorkItemViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gestionar items de trabajo asociados directamente a una base de datos,
+    sin necesidad de asociarlos a un presupuesto.
+    """
+    queryset = WorkItem.objects.all()
+    serializer_class = DatabaseWorkItemSerializer
+
+    def get_queryset(self):
+        """Filtrar work items por database_id si se proporciona"""
+        queryset = super().get_queryset()
+        database_id = self.request.query_params.get('database_id')
+        if database_id:
+            queryset = queryset.filter(database_id=database_id)
+        return queryset
